@@ -1,5 +1,3 @@
-// src/app.ts
-
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -11,29 +9,22 @@ import reviewRoutes from "./modules/review/review.routes";
 import { errorHandler } from "./utils/errorHandler";
 import logger from "./utils/logger";
 
+import path from "path";
+
 const app = express();
 
-// -----------------------------
-//  Middleware
-// -----------------------------
 app.use(helmet());
 app.use(cors());
 app.use(express.json({ limit: "2mb" }));
 
-// -----------------------------
-//  Routes
-// -----------------------------
 app.use("/api/github", githubRoutes);
 app.use("/api/review", reviewRoutes);
 
-// -----------------------------
 //  Error Middleware
-// -----------------------------
 app.use(errorHandler);
 
-// -----------------------------
 //  Start Function
-// -----------------------------
+
 async function startServer() {
   try {
     // Connect DB
@@ -51,5 +42,11 @@ async function startServer() {
 }
 
 startServer();
+
+app.use(express.static(path.join(__dirname, "dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
 
 export default app;
