@@ -8,10 +8,6 @@ router.post('/pr-diff', getPrDiff);
 
 export default router;
 
-
-// -----------------------------
-// src/modules/agents/diffParser.agent.ts
-// -----------------------------
 export interface FileChange {
 path: string;
 oldPath?: string | null;
